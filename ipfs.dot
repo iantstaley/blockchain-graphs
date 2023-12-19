@@ -1,0 +1,37 @@
+digraph ipfs {
+  rankdir=LR;
+
+  subgraph naming_ipns {
+
+    write -> public_key;
+    public_key -> "Hash(Name)";
+    "Hash(Name)" -> All_Nodes;
+    private_key -> Sign_Record
+    Sign_Record -> "Hash(Name)";
+    All_Nodes -> SFS_on_top_NFS;
+
+    read -> private_key;
+    private_key -> decrypt_and_change_Name -> "Hash(Name)";
+
+  }
+
+  subgraph merkledag {
+
+  }
+
+  subgraph exchange {
+
+
+  }
+
+  subgraph routing {
+
+
+  }
+
+  subgraph network {
+
+
+  }
+
+}

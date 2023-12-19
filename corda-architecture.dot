@@ -1,0 +1,78 @@
+digraph corda {
+
+  layout="circo";
+  node [shape=circle];
+
+  rankdir=LR;
+  subgraph facts_by_node {
+    node [shape = circle];
+    Fact_1 [shape = doublecircle];
+    Fact_2 [shape = doublecircle];
+    Fact_3 [shape = doublecircle];
+    Fact_4 [shape = doublecircle];
+    Fact_5 [shape = doublecircle];
+    Fact_6 [shape = doublecircle];
+    Fact_7 [shape = doublecircle];
+    Fact_8 [shape = doublecircle];
+    Fact_9 [shape = doublecircle];
+
+    node_A -> node_B [label="AMQP/1.0 over TLS" ];
+
+    node_A -> Fact_1 [color="blue"];
+    node_A -> Fact_7 [color="blue"];
+    node_B -> Fact_1 [color="blue"];
+    node_B -> Fact_7 [color="blue"];
+    node_B -> Fact_5 [color="orange"];
+    node_B -> Fact_6 [color="orange"];
+
+    node_C -> Fact_5 [color="orange"];
+    node_C -> Fact_6 [color="orange"];
+    node_C -> Fact_2 [color="brown"];
+    node_C -> Fact_9 [color="brown"];
+    node_C -> Fact_4 [color="brown"];
+    node_C -> Fact_3 [color="brown"];
+    node_D -> Fact_2 [color="brown"];
+    node_D -> Fact_3 [color="brown"];
+    node_D -> Fact_8 [color="brown"];
+    node_E -> Fact_3 [color="brown"];
+    node_E -> Fact_4 [color="brown"];
+    node_E -> Fact_8 [color="brown"];
+    node_E -> Fact_9 [color="brown"];
+
+  }
+
+  rankdir=LR;
+  subgraph components_by_node {
+    node [shape = box];
+
+    node_E -> JVM [label="has" arrowhead="none"];
+    node_E_owner -> CorDapps [label="RPC calls"];
+    JVM -> smart_contracts [arrowhead="crow" label="execute"];
+    node_A -> Notary_Services [arrowhead="crow"];
+
+    node_A -> Oracle_Service;
+    node_A -> Vault [arrowhead="none"];
+    Vault -> Consumed_Historical_States;
+    Vault -> Uncosumed_States;
+
+
+    Notary_Services -> Consensus_Algorithms [arrowhead="crow"];
+    Oracle_Service -> Transaction [label="Sign"];
+
+    #Abstract objects
+
+    developers -> CorDapps [label="build and deploy" arrowhead="crow"];
+
+    CorDapps -> smart_contracts [arrowhead="crow"];
+
+    smart_contracts -> States [arrowhead="crow"];
+    States -> Transaction;
+    Transaction -> New_States;
+
+    New_Node -> Doorman [label="Know-Your-Customer rules" color="green"];
+    Doorman -> Permissioning_Service_PKI [label="If KYC ok Sign certificates" color="green"];
+    Permissioning_Service_PKI -> New_Node [label="root-authority-signed TLS certificate" color="green"];
+
+  }
+
+}
